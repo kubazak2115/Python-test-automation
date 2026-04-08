@@ -16,7 +16,7 @@ Automated test suite for [Sauce Demo](https://www.saucedemo.com) (UI) and [JSONP
 ## Project Structure
 
 ```
-qa-portfolio/
+Python test automation/
 ├── tests/
 │   ├── ui/
 │   │   ├── test_login.py       # Login flows, edge cases, parametrized tests
