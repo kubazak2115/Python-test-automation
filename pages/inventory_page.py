@@ -8,7 +8,7 @@ class InventoryPage(BasePage):
 
     PAGE_TITLE = (By.CLASS_NAME, "title")
     PRODUCT_ITEMS = (By.CLASS_NAME, "inventory_item")
-    ADD_TO_CART_BTN = (By.CSS_SELECTOR, ".inventory_item button")
+    ADD_TO_CART_BTN = (By.CSS_SELECTOR, "button[data-test^='add-to-cart']")
     CART_BADGE = (By.CLASS_NAME, "shopping_cart_badge")
     CART_LINK = (By.CLASS_NAME, "shopping_cart_link")
     SORT_DROPDOWN = (By.CLASS_NAME, "product_sort_container")
@@ -36,8 +36,9 @@ class InventoryPage(BasePage):
         
     def add_item_to_cart_by_index(self, index: int):
         buttons = self.driver.find_elements(*self.ADD_TO_CART_BTN)
-        # if 0 <= index < len(buttons):
-        buttons[index].click()
+        add_buttons = [b for b in buttons if "add-to-cart" in b.get_attribute("data-test")]
+        if 0 <= index < len(add_buttons):
+            add_buttons[index].click()
     
     def get_cart_count(self) -> int:
         badges = self.driver.find_elements(*self.CART_BADGE)

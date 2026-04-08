@@ -38,6 +38,8 @@ class CartPage(BasePage):
             if not buttons:
                 break
             buttons[0].click()
+            import time
+            time.sleep(0.3)
     
     def continue_shopping(self):
         self.find_clickable(self.CONTINUE_BTN).click()

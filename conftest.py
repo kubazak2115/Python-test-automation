@@ -44,15 +44,34 @@ def driver():
 
     browser.quit() 
 
+# @pytest.fixture(scope="function")
+# def logged_in_driver(driver):
+    
+#     from pages.login_page import LoginPage
+
+#     login_page = LoginPage(driver, BASE_URL)
+#     login_page.open()
+#     login_page.login(VALID_USER, VALID_PASSWORD)
+    
+#     return driver
+
 @pytest.fixture(scope="function")
 def logged_in_driver(driver):
-    
+    from pages.login_page import LoginPage
+    from pages.cart_page import CartPage
+
     from pages.login_page import LoginPage
 
     login_page = LoginPage(driver, BASE_URL)
     login_page.open()
     login_page.login(VALID_USER, VALID_PASSWORD)
-    
-    return driver
 
+    yield driver
 
+    # teardown 
+    try:
+        driver.get(BASE_URL + "/cart.html")
+        cart = CartPage(driver, BASE_URL)
+        cart.remove_all_items()
+    except Exception:
+        pass  
