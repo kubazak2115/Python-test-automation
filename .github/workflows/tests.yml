@@ -1,0 +1,63 @@
+name: Python-test-automation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+      
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Install Google Chrome
+      run: |
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo dpkg -i google-chrome-stable_current_amd64.deb
+        sudo apt-get -f install -y
+    
+    - name: Run API tests
+      run: |
+        pytest tests/api/ -m api -v \
+          --cov=. \
+          --cov-report=xml:reports/coverage.xml \
+          --cov-report=term-missing \
+          --html=reports/report-api.html \
+          --self-contained-html
+ 
+    - name: Run UI tests (headless)
+      run: |
+        pytest tests/ui/ -m ui -v \
+          --cov=. \
+          --cov-append \
+          --cov-report=xml:reports/coverage.xml \
+          --cov-report=term-missing \
+          --html=reports/report-ui.html \
+          --self-contained-html
+
+    - name: Upload HTML reports
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-reports
+        path: reports/
+        retention-days: 30
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        file: reports/coverage.xml
+        fail_ci_if_error: false
