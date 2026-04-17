@@ -1,3 +1,6 @@
+import os
+import sys
+import glob
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -20,29 +23,28 @@ PROBLEM_USER = "problem_user"
 
 @pytest.fixture(scope="function")
 def driver():
-    import os
-    import glob
-
     options = Options()
     options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--window-size=1920,1080")
-
-    def get_chromedriver_path():
+ 
+    if sys.platform == "win32":
         wdm_base = os.path.expanduser(r"~\.wdm\drivers\chromedriver\win64")
         matches = glob.glob(os.path.join(wdm_base, "**", "chromedriver.exe"), recursive=True)
-        if matches:
-            return matches[0]
-        raise FileNotFoundError("Nie znaleziono chromedriver.exe w ~/.wdm")
-
-    service = Service(executable_path=get_chromedriver_path())
-    browser = webdriver.Chrome(service=service, options=options) 
+        if not matches:
+            raise FileNotFoundError("Nie znaleziono chromedriver.exe w ~/.wdm")
+        service = Service(executable_path=matches[0])
+    else:
+        # for linux
+        service = Service(ChromeDriverManager().install())
+ 
+    browser = webdriver.Chrome(service=service, options=options)
     browser.implicitly_wait(5)
-
-    yield browser  
-
-    browser.quit() 
+ 
+    yield browser
+ 
+    browser.quit()
 
 # @pytest.fixture(scope="function")
 # def logged_in_driver(driver):
