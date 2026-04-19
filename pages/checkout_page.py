@@ -59,3 +59,9 @@ class CheckoutPage(BasePage):
     
     def go_back_home(self):
         self.find_clickable(self.BACK_HOME_BTN).click()
+
+    def is_on_step_two(self) -> bool:
+        return self.is_visible(self.FINISH_BTN)
+
+    def is_on_inventory_page(self) -> bool:
+        return "/inventory.html" in self.driver.current_url

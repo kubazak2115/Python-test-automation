@@ -24,10 +24,16 @@ PROBLEM_USER = "problem_user"
 @pytest.fixture(scope="function")
 def driver():
     options = Options()
-    options.add_argument("--headless=new")
+    # options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--window-size=1920,1080")
+    options.add_argument("--password-store=basic")
+    options.add_experimental_option("prefs", {
+        "credentials_enable_service": False,
+        "profile.password_manager_enabled": False,
+        "profile.password_manager_leak_detection": False,
+    })
 
     browser = webdriver.Chrome(options=options)
 
@@ -59,10 +65,4 @@ def logged_in_driver(driver):
 
     yield driver
 
-    # teardown 
-    try:
-        driver.get(BASE_URL + "/cart.html")
-        cart = CartPage(driver, BASE_URL)
-        cart.remove_all_items()
-    except Exception:
-        pass  
+

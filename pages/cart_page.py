@@ -37,10 +37,8 @@ class CartPage(BasePage):
             buttons = self.driver.find_elements(*self.REMOVE_BUTTONS)
             if not buttons:
                 break
-            buttons[0].click()
-            import time
-            time.sleep(0.3)
-    
+            buttons[0].click()    
+            
     def continue_shopping(self):
         self.find_clickable(self.CONTINUE_BTN).click()
     
