@@ -29,16 +29,7 @@ def driver():
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--window-size=1920,1080")
 
-    def get_chromedriver_path():
-        wdm_base = os.path.expanduser(r"~\.wdm\drivers\chromedriver\win64")
-        matches = glob.glob(os.path.join(wdm_base, "**", "chromedriver.exe"), recursive=True)
-        if matches:
-            return matches[0]
-        raise FileNotFoundError("Nie znaleziono chromedriver.exe w ~/.wdm")
-
-    service = Service(executable_path=get_chromedriver_path())
-    browser = webdriver.Chrome(service=service, options=options) 
-    browser.implicitly_wait(5)
+    browser = webdriver.Chrome(options=options)
 
     yield browser  
 
