@@ -1,3 +1,6 @@
+import os
+import sys
+import glob
 import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -20,9 +23,6 @@ PROBLEM_USER = "problem_user"
 
 @pytest.fixture(scope="function")
 def driver():
-    import os
-    import glob
-
     options = Options()
     options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")

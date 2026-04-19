@@ -1,3 +1,6 @@
+![CI](https://github.com/kubazak2115/Python-test-automation/actions/workflows/tests.yml/badge.svg)
+[![codecov](https://codecov.io/gh/kubazak2115/Python-test-automation/branch/main/graph/badge.svg)](https://codecov.io/gh/kubazak2115/Python-test-automation)
+
 # Python test automation
 
 Automated test suite for [Sauce Demo](https://www.saucedemo.com) (UI) and [JSONPlaceholder](https://jsonplaceholder.typicode.com) (API)
